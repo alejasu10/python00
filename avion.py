@@ -26,7 +26,6 @@ if compra=="s":
                         asi[i][j]="ocupado"
                         print("Compra exitosa ")
                         print("\n")
-             
         for i in range(len(asi)):
             for j in range(len(asi[i])):
                 if asi[i][j]!="ocupado":
