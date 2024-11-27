@@ -59,7 +59,8 @@ for i in range(len(x)):
 #ejr.3
 # imprimir par o impar
 numero=[1,2,3,4,5,6,7,8,9]
-letras=[]
+letras=["par" if i%2==0 else "impar" for i in numero]
+print(letras)
 x=[i for i in numero if i%2==0 ]
 print("numeros pares:",x)
 y=[i for i in numero if i%2!=0]
