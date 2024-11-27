@@ -64,3 +64,19 @@ with open("addresses.csv", "r", encoding="utf-8") as f, open("escribir_2.txt", "
     print(" ".join(linea[0]))# imprime la linea 0 del archivo csv, la linea especifica que le pido
     
     nuevodoc.write(" ".join(linea[0]))# escribe en el archivo nuevo con la linea que le doy
+
+#### ejercicio-3 con el archivo empleados , imprime solo el nombre y su email
+import csv # importamos la lib csv
+#F1
+""" with open("empleados.csv","r",encoding="utf-8") as f, open("empleados2.txt","a",encoding="utf-8") as nuevo:
+    f.readline()# lee las lineas, sacando los encabezados
+    reader=csv.reader(f)# transformamos el reader sin los encabezados
+    for line in reader:# imprimimos y guardamos los datos
+        print(f"Nombre: {line[1]} , Email: {line[3]}")
+        nuevo.write(f"Nombre: {line[1]} , Email: {line[3]}\n") """
+ #F2   
+""" for line in reader: 
+        if line[1]!="FIRST_NAME":    
+            print(f"Nombre: {line[1]} , Email: {line[3]}")
+            nuevo.write(f"Nombre: {line[1]} , Email: {line[3]}\n") """
+    
