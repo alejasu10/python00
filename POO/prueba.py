@@ -19,54 +19,70 @@ BLACK = (0, 0, 0)
 clock = pygame.time.Clock()
 FPS =60
 
-# Vehicle class
+
+
+# creando los obstaculos
+class Obstacle:
+    def __init__(self, name, image_path, x, y):
+        self.name = name
+        self.image = pygame.image.load(image_path)
+        self.image = pygame.transform.scale(self.image, (100, 100))
+        self.x = x
+        self.y = y
+        self.rect = self.image.get_rect(topleft=(x, y))  # Add this line
+    
+    def draw(self, surface):
+        surface.blit(self.image, (self.x, self.y))
+        self.rect.topleft = (self.x, self.y)  # Update rect position
+
+# creando el carro
 class Vehicle:
     def __init__(self, name, image_path, x, y):
         self.name = name
         self.image = pygame.image.load(image_path)
-        self.image = pygame.transform.scale(self.image, (100, 100))  # Resize the image
+        self.image = pygame.transform.scale(self.image, (100, 100))
         self.x = x
         self.y = y
+        self.rect = self.image.get_rect(topleft=(x, y)) 
 
     def drive(self, dx, dy):
-        """Mover el coche """
         self.x += dx
         self.y += dy
+        self.rect.topleft = (self.x, self.y)  # Update rect position
 
     def draw(self, surface):
-        """Dibujar el coche """
         surface.blit(self.image, (self.x, self.y))
-
+        
 
 CAR_IMAGE_PATH = "POO/car.png"  
 
 # Create a vehicle object
 car = Vehicle("Coche 1", CAR_IMAGE_PATH, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
-# obstaculos
-class Obstacle:
-    def __init__(self, name, image_path, x, y):
-        self.name = name
-        self.image = pygame.image.load(image_path)
-        self.image = pygame.transform.scale(self.image, (100, 100)) 
-        self.x = x
-        self.y = y
-    def draw(self, surface):# dibiujar el obstaculo
-        surface.blit(self.image, (self.x, self.y))
-        #dibujar rectangulo
-    def rect(self):
-        self.rect = pygame.rect(self.x, self.y, self.image.get_width(), self.image.get_height())
+
+# creando el enemigo
 class enemigo(Obstacle):
     def __init__(self, name, image_path, x, y):
         super().__init__(name, image_path, x, y)
         self.image = pygame.transform.scale(self.image, (50, 50))
-        
-    def draw(self, surface):# dibiujar el enemigo
-        
+
+    def draw(self, surface):
         surface.blit(self.image, (self.x, self.y))
-            
-        
-        
+        self.rect.topleft = (self.x, self.y)
+    
+    #dandole movimiento al enemigo
+    def move(self, dx, dy):
+        self.x = dx
+        self.y += dy
+        self.rect.topleft = (self.x, self.y)
+
+# Update collision detection functions
+def check_collision(car, obstacle):
+    return car.rect.colliderect(obstacle.rect)
+
+def check_collision_enemy(car, enemy):
+    return car.rect.colliderect(enemy.rect)
+
 roca_path = "POO/roca.jpg"
 random_x = random.randint(0, SCREEN_WIDTH - 100)
 random_y = random.randint(0, SCREEN_HEIGHT - 100)
@@ -90,16 +106,6 @@ random_x = random.randint(0, SCREEN_WIDTH - 100)
 random_y = random.randint(0, SCREEN_HEIGHT - 100)
 enemy= enemigo("enemigo", enemy_path, random_x, random_y)
 
-# colision de objetos
-
-def check_collision(car, obstacle):
-    car_rect = pygame.Rect(car.x, car.y, car.image.get_width(), car.image.get_height())
-    obstacle_rect = pygame.Rect(obstacle.x, obstacle.y, obstacle.image.get_width(), obstacle.image.get_height())
-    return car_rect.colliderect(obstacle_rect)
-def check_collision_enemy(car,enemigo):
-    car_rect = pygame.Rect(car.x, car.y, car.image.get_width(), car.image.get_height())
-    enemy_rect = pygame.Rect(enemigo.x, enemigo.y, enemigo.image.get_width(), enemigo.image.get_height())
-    return car_rect.colliderect(enemy_rect)
 
 
 # Main game loop
@@ -123,10 +129,14 @@ def main():
             car.drive(5, 0)  # Move right
 
         # Check for collision
-        if check_collision(car, roca,):
+        if check_collision(car, roca):
             print("has chocado con la roca!")
         elif check_collision_enemy(car, enemy):
             print("has chocado con el enemigo!")
+        elif check_collision(car, roca2):
+            print("has chocado con la roca!")
+        elif check_collision(car, roca3):
+            print("has chocado con la roca!")
         
         # Borrar el screen
         screen.fill(WHITE)
@@ -137,7 +147,11 @@ def main():
         roca2.draw(screen)
         roca3.draw(screen)
         enemy.draw(screen)
-
+        
+        enemy.move(0, 5)
+        if enemy.y > 800:
+            enemy.y = 5
+    
         # Actualizar todo que has sido dibujado
         pygame.display.flip()
 
