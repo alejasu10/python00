@@ -19,6 +19,9 @@ BLACK = (0, 0, 0)
 clock = pygame.time.Clock()
 FPS =60
 
+# Texto en la ventana
+font = pygame.font.Font(None, 36)
+
 #background 
 
 class Background:# imagen de fondo
@@ -85,13 +88,10 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
         # Handle keys for car movement
         keys = pygame.key.get_pressed()
-        
         if keys[pygame.K_SPACE] and not Pj.jump:# salto
             Pj.jump = True
-        
         if Pj.jump:# salto
                 Pj.y -= Pj.jumpcount 
                 Pj.jumpcount -= 1
@@ -101,13 +101,11 @@ def main():
         obstacle.move(6)
         if obstacle.x <0:
             obstacle.x = 800
-        
-
         # Check for collision
         if check_collision(Pj, obstacle):
             print("has chocado con la roca!")
-        
-        if obstacle.x == Pj.x-30:
+            running = False
+        if obstacle.x == Pj.x+20:
             count +=1
             print(count)
         # Borrar el screen
@@ -117,6 +115,10 @@ def main():
         # Dibujar los objetos
         Pj.draw(screen)
         obstacle.draw(screen)
+        
+        # Dibujar el score
+        score_text = font.render(f'Score: {count}', True, BLACK)
+        screen.blit(score_text, (40, 20))
         
         
         # Actualizar todo que has sido dibujado
