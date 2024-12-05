@@ -2,16 +2,16 @@ import pygame
 import sys
 import random
 
-# Initialize pygame
+# codigo obligatorio para iniciar pygame
 pygame.init()
 
-# Screen dimensions
-SCREEN_WIDTH = 800
+# dimensiones de ka ventana
+SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 200
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("juego prueba")
+pygame.display.set_caption("juego prueba")# nombre ne la ventana
 
-# Colors
+# Colores
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
@@ -21,12 +21,11 @@ FPS =60
 
 #background 
 
-class Background:
+class Background:# imagen de fondo
     def __init__(self, image_path):
         self.image = pygame.image.load(image_path)
         self.image = pygame.transform.scale(self.image, (SCREEN_WIDTH, SCREEN_HEIGHT))
-
-    def draw(self, surface):
+    def draw(self, surface):# dibujo de la imagen
         surface.blit(self.image , (0, 0))
     
 background_image = "POO/bottom.png"
@@ -37,19 +36,20 @@ class Obstacle:
     def __init__(self, name, image_path, x, y=90):
         self.name = name
         self.image = pygame.image.load(image_path)
-        self.image = pygame.transform.scale(self.image, (50, 50))
+        self.image = pygame.transform.scale(self.image, (40, 40))
         self.x = x
         self.y = y
-        self.rect = self.image.get_rect(topleft=(20, 20))  # rectangulo de colision
-    
+        self.rect = self.image.get_rect(center=(self.x, self.y))# rectangulo de colision
+        self.rect.height = 20
+        self.rect.width = 20# tamañop del rectangulo de colision
     def draw(self, surface):
         surface.blit(self.image, (self.x, self.y))
-        self.rect.topleft= (self.x, self.y)  # Update rect position
+        self.rect.center= (self.x, self.y)  # update rectangulo de colision
         
     def move(self, dx):
         self.x -= dx
 
-# creando el persoonaje
+# creando el personaje
 
 class Personaje:
     def __init__(self, name, image_path, x, y):
@@ -58,21 +58,19 @@ class Personaje:
         self.image = pygame.transform.scale(self.image, (30, 30))
         self.x = x
         self.y = y
+        self.velocity = 5
         self.jump=False
         self.jumpcount=12# altura del salto
-        self.rect = self.image.get_rect(topleft=(x, y)) 
-
-
+        self.rect = self.image.get_rect(center=(self.x, self.y))
     def draw(self, surface):
         surface.blit(self.image, (self.x, self.y))
-        self.rect.topleft = (self.x, self.y)
+        self.rect.center = (self.x, self.y)
 
 Pj_image= "POO/assets/1.png"
-Pj=Personaje("personaje",Pj_image,300,100)
+Pj=Personaje("personaje",Pj_image,180,100)
 
 obstacle_image = "POO/assets/roca.png"
-obstacle = Obstacle("obstacle", obstacle_image, 700)
-
+obstacle = Obstacle("obstacle", obstacle_image, 500)
 
 def check_collision(pj, obstacle):
     return pj.rect.colliderect(obstacle.rect)
@@ -81,7 +79,7 @@ def check_collision(pj, obstacle):
 # Main game loop
 def main():
     running = True
-
+    count=0
     while running:
         
         for event in pygame.event.get():
@@ -100,28 +98,31 @@ def main():
                 if Pj.jumpcount < -12:#gravedad
                     Pj.jump = False
                     Pj.jumpcount = 12
-        obstacle.move(3)
+        obstacle.move(6)
         if obstacle.x <0:
             obstacle.x = 800
+        
+
         # Check for collision
         if check_collision(Pj, obstacle):
             print("has chocado con la roca!")
         
+        if obstacle.x == Pj.x-30:
+            count +=1
+            print(count)
         # Borrar el screen
         screen.fill(WHITE)
         bak.draw(screen)
         
-
         # Dibujar los objetos
         Pj.draw(screen)
         obstacle.draw(screen)
-
+        
+        
         # Actualizar todo que has sido dibujado
         pygame.display.flip()
-
         # Mantener el FPS
         clock.tick(FPS)
-
     pygame.quit()
     sys.exit()
 
