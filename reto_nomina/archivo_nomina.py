@@ -22,3 +22,31 @@ def cargar_nomina():
             empleado = [nombre, sueldo, cargo,tipo]
             empleados.append(empleado)
     return empleados
+
+# crear un nuevo empleado
+def crear_empleado():
+        nombre=input("ingrese el nombre del nuevo empleado: ")
+        nombre=nombre.capitalize()
+        nuevo_sueldo=float(input("ingrese el sueldo del nuevo empleado: "))
+        nuevo_cargo=input("ingrese el cargo del nuevo empleado: ")
+        empleados=[nombre,nuevo_sueldo,nuevo_cargo] 
+        return empleados
+
+# crear tabla de nomina
+def Nomina(empleados): # imprime la nomina del empleado en una tabla
+        tabla = """\
+        +-------------------------------------------------+
+        | Nombre             Sueldo           Cargo       |
+        |-------------------------------------------------|
+        {}
+        +-------------------------------------------------+\
+        """
+        # Formato para cada fila de la tabla
+        filas = []
+        for empleado in empleados:
+            fila = "| {:<18} {:<8.2f}$ {:>16}   |".format(empleado[0], empleado[1], empleado[2])
+            filas.append(fila)
+        
+        # Unir las filas con saltos de línea para formar la tabla
+        datos_Nomina = tabla.format("\n        ".join(filas))
+        return datos_Nomina

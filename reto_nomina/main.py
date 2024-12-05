@@ -17,19 +17,26 @@ if __name__ == "__main__":
         # evaluamos la opcion del menu
         match opcion:
             case 1:# cargamos los empleados del archivo
-                empleados=archivo.cargar_nomina()#cargamos los empleados del archivo desde el archivo_nomina.py
+#cargamos los empleados del archivo desde el archivo_nomina.py
+                empleados=archivo.cargar_nomina()
                 print("Nominas de Empleados")
                 print("================")
+                lista_empleados=[]# lista para almacenar los empleados
                 for empleado in empleados:# mostramos la nomina de los empleados
+                    # verificamos si es programador o analista, luego creamos el empleado
                     if empleado[3]=="Programador":
                         empleado=em.Programador(empleado[0],empleado[1],empleado[2])
-                        print(empleado.Nomina_Programador())
-                        print("================")
+                        lista_empleados.append([empleado.nombre, empleado.calculo_del_sueldo(), empleado.cargo])
+                        # agregamos el empleado a la lista
                     elif empleado[3]=="Analista":
                         empleado=em.Analista(empleado[0],empleado[1],empleado[2])
-                        print(empleado.Nomina_Analista())
-                        print("================")
+                        lista_empleados.append([empleado.nombre, empleado.calculo_del_sueldo(), empleado.cargo])
+                nomina=archivo.Nomina(lista_empleados)# llamamos a la funcion nomina para imprimir la tabla
+                print(nomina)
+                print("================")
+
             case 2:# buscamos un empleado por su nombre
+                lista_empleados=[]# lista para almacenar los empleados
                 buscar=input("Ingrese el nombre del empleado a buscar: ")
                 buscar=buscar.lower()
                 buscar=buscar.capitalize()
@@ -40,18 +47,22 @@ if __name__ == "__main__":
                         print("================")
                         if empleado[3]=="Programador":
                             empleado=em.Programador(empleado[0],empleado[1],empleado[2])
-                            print(empleado.Nomina_Programador())
+                            lista_empleados.append([empleado.nombre, empleado.calculo_del_sueldo(), empleado.cargo])
+                            nomina=archivo.Nomina(lista_empleados)# llamamos a la funcion nomina para imprimir la tabla
+                            print(nomina)
                             print("================")
                         elif empleado[3]=="Analista":
                             empleado=em.Analista(empleado[0],empleado[1],empleado[2])
-                            print(empleado.Nomina_Analista())
+                            lista_empleados.append([empleado.nombre, empleado.calculo_del_sueldo(), empleado.cargo])
+                            nomina=archivo.Nomina(lista_empleados)# llamamos a la funcion nomina para imprimir la tabla
+                            print(nomina)
                             print("================")
             case 3:
                 nuevo_cate=int(input("ingrese la categoria del nuevo empleado: \n 1.Programador\n 2.Analista\n"))
                 #creamos un nuevo empleado en base a la categoria
                 if nuevo_cate==1:
                     cate_ria="Programador"# dato para localizar el sueldo en base a la categoria
-                    empleado= em.Empleado.crear_empleado()
+                    empleado= archivo.crear_empleado()
                     empleados= [empleado[0],empleado[1],empleado[2],cate_ria]#lista de empleados a guardar
                     archivo.guardar_nomina(empleados)
                     system("cls")
@@ -61,7 +72,7 @@ if __name__ == "__main__":
                     
                 elif nuevo_cate==2:#creamos un nuevo empleado en base a la categoria
                     cate_ria="Analista"#con este dato podemos sacar su sueldo en base a la categoria
-                    empleado= em.Empleado.crear_empleado()
+                    empleado= archivo.crear_empleado()
                     empleados= [empleado[0],empleado[1],empleado[2],cate_ria]
                     archivo.guardar_nomina(empleados)
                     system("cls")
