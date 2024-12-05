@@ -11,7 +11,8 @@ if __name__ == "__main__":
         print("1. Mostrar la nomina de empleados")
         print("2. Buscar empleado por nombre")
         print("3. Agregar un nuevo empleado")
-        print("4. Salir")
+        print("4. Eliminar empleado")
+        print("5. Salir")
         opcion=int(input("Elija una opcion: "))
         system("cls") # limpiamos la pantalla
         # evaluamos la opcion del menu
@@ -21,42 +22,20 @@ if __name__ == "__main__":
                 empleados=archivo.cargar_nomina()
                 print("Nominas de Empleados")
                 print("================")
-                lista_empleados=[]# lista para almacenar los empleados
-                for empleado in empleados:# mostramos la nomina de los empleados
-                    # verificamos si es programador o analista, luego creamos el empleado
-                    if empleado[3]=="Programador":
-                        empleado=em.Programador(empleado[0],empleado[1],empleado[2])
-                        lista_empleados.append([empleado.nombre, empleado.calculo_del_sueldo(), empleado.cargo])
-                        # agregamos el empleado a la lista
-                    elif empleado[3]=="Analista":
-                        empleado=em.Analista(empleado[0],empleado[1],empleado[2])
-                        lista_empleados.append([empleado.nombre, empleado.calculo_del_sueldo(), empleado.cargo])
-                nomina=archivo.Nomina(lista_empleados)# llamamos a la funcion nomina para imprimir la tabla
+                #Enviamos la lista empleados a su verificacion para luego imprimir su sueldo correcto
+                nomina=archivo.verificar_tipo_empleado(empleados)
                 print(nomina)
                 print("================")
 
             case 2:# buscamos un empleado por su nombre
-                lista_empleados=[]# lista para almacenar los empleados
                 buscar=input("Ingrese el nombre del empleado a buscar: ")
                 buscar=buscar.lower()
                 buscar=buscar.capitalize()
-                empleados=archivo.cargar_nomina()
-                for empleado in empleados:
-                    if empleado[0]==buscar:
-                        print("Empleado encontrado")
-                        print("================")
-                        if empleado[3]=="Programador":
-                            empleado=em.Programador(empleado[0],empleado[1],empleado[2])
-                            lista_empleados.append([empleado.nombre, empleado.calculo_del_sueldo(), empleado.cargo])
-                            nomina=archivo.Nomina(lista_empleados)# llamamos a la funcion nomina para imprimir la tabla
-                            print(nomina)
-                            print("================")
-                        elif empleado[3]=="Analista":
-                            empleado=em.Analista(empleado[0],empleado[1],empleado[2])
-                            lista_empleados.append([empleado.nombre, empleado.calculo_del_sueldo(), empleado.cargo])
-                            nomina=archivo.Nomina(lista_empleados)# llamamos a la funcion nomina para imprimir la tabla
-                            print(nomina)
-                            print("================")
+                empleado=archivo.buscar_empleado(buscar)
+                print(empleado)
+                salir=input("Presione enter para continuar")
+                system("cls")
+                
             case 3:
                 nuevo_cate=int(input("ingrese la categoria del nuevo empleado: \n 1.Programador\n 2.Analista\n"))
                 #creamos un nuevo empleado en base a la categoria
@@ -84,7 +63,11 @@ if __name__ == "__main__":
                     print("Categoria no valida")
                     salir=input("Presione enter para continuar")
                     system("cls")
-                    
             case 4:
+                archivo.eliminar_empleado()
+                salir=input("Presione enter para continuar")
+                system("cls")
+                    
+            case 5:
                 print("Saliendo del programa")
                 main=False
