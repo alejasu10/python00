@@ -83,6 +83,8 @@ def check_collision(pj, obstacle):
 def main():
     running = True
     count=0
+    vel=3#nivel
+    vel_ob=6# Velocidad del obstaculo
     while running:
         
         for event in pygame.event.get():
@@ -98,7 +100,7 @@ def main():
                 if Pj.jumpcount < -12:#gravedad
                     Pj.jump = False
                     Pj.jumpcount = 12
-        obstacle.move(6)
+        obstacle.move(vel_ob)
         if obstacle.x <0:
             obstacle.x = 800
         # Check for collision
@@ -108,6 +110,9 @@ def main():
         if obstacle.x == Pj.x+20:
             count +=1
             print(count)
+        if count > vel:# Cada vez que el score es mayor a 3 se aumenta la velocidad del obstaculo y el score
+            vel_ob+=2
+            vel+=5
         # Borrar el screen
         screen.fill(WHITE)
         bak.draw(screen)
