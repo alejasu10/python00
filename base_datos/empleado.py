@@ -17,6 +17,7 @@ class Programador(Empleado):
         self.sueldo = self.sueldo*1.5
         self.sueldo = round(self.sueldo,2)
         return self.sueldo
+    
 # Hereda de Empleado, analista parecida a Programador
 class Analista(Empleado):
     def __init__(self, nombre,apellido,direccion,edad,cargo,salario):
