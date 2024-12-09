@@ -1,7 +1,7 @@
 import Empleados as em
 # Guardar en un archivo la nomina de un empleado
 def guardar_nomina(empleados):
-    with open("reto_nomina/nomina.txt", "a") as archivo:
+    with open("nomina.txt", "a") as archivo:
         # Dependiendo de la categoria del empleado se guarda en el archivo
         if empleados[3]=="Programador":
             archivo.write(f"{empleados[0]},{empleados[1]},Prog. {empleados[2]},{empleados[3]}\n")
@@ -11,25 +11,34 @@ def guardar_nomina(empleados):
 # Cargar la nomina de un archivo
 def cargar_nomina():
     empleados = []#lista donde se guardan los empleados extraidos del archivo
-    with open("reto_nomina/nomina.txt", "r") as archivo:
-        # Leer el archivo línea por línea y agregar los datos a la lista
-        for linea in archivo:
-            datos = linea.strip().split(",")
-            nombre = datos[0]
-            sueldo = float(datos[1])
-            cargo = datos[2]
-            tipo=datos[3]
-            empleado = [nombre, sueldo, cargo,tipo]
-            empleados.append(empleado)
-    return empleados
-# Funcion para eliminar un empleado
+    try:
+        # Abrimos el archivo en modo lectura
+        with open("nomina.txt", "r") as archivo:
+            # Leer el archivo línea por línea y agregar los datos a la lista
+            for linea in archivo:
+                datos = linea.strip().split(",")
+                nombre = datos[0]
+                sueldo = float(datos[1])
+                cargo = datos[2]
+                tipo=datos[3]
+                empleado = [nombre, sueldo, cargo,tipo]
+                empleados.append(empleado)
+        return empleados
+    except FileNotFoundError:
+        print("Archivo no encontrado")
+        
+        
+def crear_archivo():
+    with open("nomina.txt", "w") as archivo:
+        archivo.close()
+    # Funcion para eliminar un empleado
 def eliminar_empleado():
     # Pedir al usuario el nombre del empleado a eliminar y con lower y capitalize lo igualamos y guardamos
     empleado_a_eliminar = input("Ingrese el nombre del empleado a eliminar: ")
     empleado_a_eliminar = empleado_a_eliminar.lower()
     empleado_a_eliminar = empleado_a_eliminar.capitalize()
     # Abrimos el archivo en modo lectura y guardamos los empleados linea por linea
-    with open("reto_nomina/nomina.txt", "r") as archivo:
+    with open("nomina.txt", "r") as archivo:
         empleados = archivo.readlines()
     # Buscamos el empleado a eliminar en la lista de empleados
     empleado_encontrado = False
@@ -44,7 +53,7 @@ def eliminar_empleado():
         return
     # Abrimos el archivo en modo escritura y escribimos las lineas que no sean iguales al empleado a eliminar
     if empleado_encontrado:
-        with open("reto_nomina/nomina.txt", "w") as archivo:
+        with open("nomina.txt", "w") as archivo:
             for linea in empleados:
                 if linea.split(",")[0] != empleado_a_eliminar:
                     archivo.write(linea)

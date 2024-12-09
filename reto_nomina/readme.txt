@@ -40,5 +40,6 @@ nominas.calcular_nomina(empleados)
 
 # Los datos se guardan en un archivo de texto
 # Los datos guardados se pueden cargar y eliminar
+# El archivo donde se guardan tiene por defecto "nomina.txt"
 
 # Se describe lo que hace cada codigo en todas hojas de trabajo
