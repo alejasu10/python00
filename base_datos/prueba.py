@@ -1,20 +1,13 @@
 import sqlite3
-class Demo:
-    def __init__(self,id,name,hint):
-        self.id=id
-        self.nombre=name
-        self.edad=hint
 
 
-conn = sqlite3.connect('base_datos/empleados.db')
+conn = sqlite3.connect('base_datos/sqlite.db')
 
 cursor=conn.cursor()
-sql="SELECT * FROM empleado"# Selecciona todos los campos
+sql="SELECT * FROM Empleado"
 cursor.execute(sql)
 filas=cursor.fetchall()
 
-demos=[Demo(*fila) for fila in filas] # list comprehension, unpacking
-
-for demo in demos:
-    print(demo.id," ",demo.nombre," ",demo.edad)# Muestra los datos de la tabla demo
+for fila in filas:
+    print(fila[0]," ",fila[1]," ",fila[2]," ",fila[3]," ",fila[4]," ",fila[5]," ",fila[6])
 conn.close()

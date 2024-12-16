@@ -5,10 +5,9 @@ import base_datos as based
 import funciones as fn
 
 if __name__ == '__main__':
-    menu = True #Bandera del ciclo while, para mantener dentro o salir del ciclo.
-    bd = based.base_datos()# Instancia de la clase base_datos.
+    menu = True #Bandera del ciclo while, para mantener dentro o salir del ciclo.# Instancia de la clase base_datos.
     # declaramos la ruta de la base de datos.
-    db_path = path.join('base_datos', 'empleados.db')
+    db_path = path.join('base_datos', 'sqlite.db')
     try:# Intentamos conectar a la base de datos.
         conn = sqlite3.connect(db_path)
         print("\nConexión exitosa a la base de datos")
@@ -36,26 +35,26 @@ if __name__ == '__main__':
             system("cls")
             match opcion:
                 case 1:
-                    bd.mostrar(conn)
+                    based.base_datos.mostrar(conn)
                     input("Presione enter para continuar")
                     system("cls")
                 case 2:
                     nombre=input("Ingrese el nombre del empleado a buscar: ")
-                    bd.buscar(conn,nombre)
+                    based.base_datos.buscar(conn, nombre)
                     salir=input("Presione enter para continuar")
                     system("cls")
                 case 3:
                     nuevo_empleado=fn.agregar_empleado()
-                    bd.agregar(conn,nuevo_empleado)
+                    based.base_datos.agregar(conn,nuevo_empleado)
                     salir=input("Presione enter para continuar")
                     system("cls")
                 case 4:
-                    bd.modificar(conn)
+                    based.base_datos.modificar(conn)
                     salir=input("Presione enter para continuar")
                     system("cls")
                 case 5:
                     nombre=input("Ingrese el nombre del empleado a eliminar: ")
-                    bd.eliminar(conn,nombre)
+                    based.base_datos.eliminar(conn,nombre)
                     salir=input("Presione enter para continuar")
                     system("cls")
                 case 6:
