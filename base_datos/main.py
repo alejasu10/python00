@@ -23,7 +23,8 @@ if __name__ == '__main__':
             print("3. Agregar un nuevo empleado")
             print("4. Modificar empleado")
             print("5. Eliminar empleado")
-            print("6. Salir")
+            print("6. Guardar cambios")
+            print("7. Guardar y Salir")
             opcion=input("Elija una opcion: ")
             # evaluamos la opcion del menu.
             if not opcion.isdigit():
@@ -49,7 +50,9 @@ if __name__ == '__main__':
                     salir=input("Presione enter para continuar")
                     system("cls")
                 case 4:
-                    based.base_datos.modificar(conn)
+                    print("Nombre del empleado a modificar: ")
+                    nombre=input()
+                    based.base_datos.modificar(conn,nombre)
                     salir=input("Presione enter para continuar")
                     system("cls")
                 case 5:
@@ -58,9 +61,32 @@ if __name__ == '__main__':
                     salir=input("Presione enter para continuar")
                     system("cls")
                 case 6:
-                    menu=False
-                    print("Gracias por usar el sistema de nominas")
-                    input("Presione enter para salir")
+                    print("Desea Guardar los cambios? (s/n): ")
+                    guardar=input()
+                    if guardar=="s":
+                        print("Guardando cambios...")
+                        conn.commit()# Guardamos los cambios en la base de datos
+                    elif guardar=="n":
+                        print("Regresando al menu...")
+                    else:
+                        print("Opcion no valida")
+                case 7:
+                    print("Desea Guardar los cambios? (s/n): ")
+                    guardar=input()
+                    if guardar=="s":
+                        print("Guardando cambios...")
+                        conn.commit()
+                        conn.close()# cerramos la conexion a la base de datos.
+                        menu=False
+                        print("Gracias por usar el sistema de nominas")
+                        input("Presione enter para salir")
+                    elif guardar=="n":
+                        print("Gracias por usar el sistema de nominas")
+                        input("Presione enter para salir")
+                        conn.close()
+                        menu=False
+                    else:
+                        print("Opcion no valida")
                 case _:
                     # si la opcion no esta dentro del menu, mostramos un mensaje de error.
                     print("Opcion no valida")
@@ -71,4 +97,3 @@ if __name__ == '__main__':
             print(f"Error: {e}")
             input("Presione enter para continuar")
             system("cls")
-    conn.close()# cerramos la conexion a la base de datos.

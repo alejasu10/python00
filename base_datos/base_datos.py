@@ -56,15 +56,23 @@ class base_datos:
         nuevo_datos=empleado
         nuevos_Datos=(nuevo_datos[0],nuevo_datos[1],nuevo_datos[2],nuevo_datos[3],nuevo_datos[4],nuevo_datos[5])
         sql="INSERT INTO Empleado (nombre,apellido,direccion,edad,cargo,salario) VALUES(?,?,?,?,?,?)"# Selecciona todos los campos
-        cursor.execute(sql, nuevos_Datos)
+        cursor.execute(sql,(nuevos_Datos))
         print("Se ha agregado el empleado")
     def modificar(conn,empleado):
+        nombre_buscado=empleado
         cursor=conn.cursor()
-        nuevo_datos=empleado
-        nuevos_Datos=(nuevo_datos[0],nuevo_datos[1],nuevo_datos[2],nuevo_datos[3],nuevo_datos[4],nuevo_datos[5])
-        sql="UPDATE empleado SET nombre=?,apellido=?,direccion=?,edad=?,cargo=?,salario=? WHERE id=?"
-        cursor.execute(sql, nuevos_Datos)
-        print("Se ha modificado el empleado")
+        sql="SELECT * FROM Empleado WHERE nombre=?"# Selecciona el campo nombre
+        cursor.execute(sql, (nombre_buscado,))
+        filas=cursor.fetchall()
+        empleados=[base_datos(*fila) for fila in filas]# list comprehension, unpacking
+        if not filas:
+            print("No se encontro el empleado")
+        else:
+            nuevo_datos=empleados
+            nuevos_Datos=(nuevo_datos[0],nuevo_datos[1],nuevo_datos[2],nuevo_datos[3],nuevo_datos[4],nuevo_datos[5])
+            sql="UPDATE empleado SET nombre=?,apellido=?,direccion=?,edad=?,cargo=?,salario=? WHERE id=?"
+            cursor.execute(sql,nuevos_Datos)
+            print("Se ha modificado el empleado")
     
     def eliminar(conn,nombre):
         cursor=conn.cursor()
@@ -89,13 +97,13 @@ class base_datos:
                     empleado.cargo," ",
                     empleado.salario)
             print("Ingrese el ID del empleado que desea eliminar")
-            id=int(input())
-            if id==empleado.id:
+            _id=int(input())
+            if _id==empleado.id:
                 print("¿Desea eliminar el empleado? (S/N)")
                 confirmacion=input()
                 if confirmacion.lower()=="s":
                     sql="DELETE FROM Empleado WHERE ID=?"
-                    cursor.execute(sql,id)
+                    cursor.execute(sql, (_id,))
                     print("Se ha eliminado el empleado")
                 else:
                         print("Error, ingrese una opcion valida")
