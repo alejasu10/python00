@@ -30,17 +30,18 @@ class base_datos:
                 empleado.cargo," ",
                 empleado.salario)
     # Buscamos un empleado en la base de datos
-    def buscar(conn,nombre):
-        nombre_buscado=nombre
+    def buscar(conn,clave,valor):
         cursor=conn.cursor()
-        sql="SELECT * FROM Empleado WHERE nombre=?"# Selecciona el campo nombre
-        cursor.execute(sql, (nombre_buscado,))
+        sql="SELECT * FROM Empleado WHERE "+clave+"=?"# Selecciona el campo elegido
+        cursor.execute(sql, (valor,))#Añade el valor a la consulta
         filas=cursor.fetchall()
         empleados=[base_datos(*fila) for fila in filas]# list comprehension, unpacking
         if not filas:
             print("No se encontro el empleado")
+            return False
         else:
             print("ID"," ","NOMBRE"," ","APELLIDO"," ","DIRECCION"," ","EDAD"," ","CARGO"," ","SALARIO")
+            ids=[]
             for empleado in empleados:
                 # Muestra los datos de la tabla empleado
                 print(
@@ -51,6 +52,8 @@ class base_datos:
                     empleado.edad," ",
                     empleado.cargo," ",
                     empleado.salario)
+                ids.append(empleado.id)
+            return ids# Devuelve una lista con los id de los empleados encontrados
     def agregar(conn,empleado):
         cursor=conn.cursor()
         nuevo_datos=empleado
@@ -58,21 +61,12 @@ class base_datos:
         sql="INSERT INTO Empleado (nombre,apellido,direccion,edad,cargo,salario) VALUES(?,?,?,?,?,?)"# Selecciona todos los campos
         cursor.execute(sql,(nuevos_Datos))
         print("Se ha agregado el empleado")
-    def modificar(conn,empleado):
-        nombre_buscado=empleado
+    def modificar(conn,doc,clave,valor):
         cursor=conn.cursor()
-        sql="SELECT * FROM Empleado WHERE nombre=?"# Selecciona el campo nombre
-        cursor.execute(sql, (nombre_buscado,))
-        filas=cursor.fetchall()
-        empleados=[base_datos(*fila) for fila in filas]# list comprehension, unpacking
-        if not filas:
-            print("No se encontro el empleado")
-        else:
-            nuevo_datos=empleados
-            nuevos_Datos=(nuevo_datos[0],nuevo_datos[1],nuevo_datos[2],nuevo_datos[3],nuevo_datos[4],nuevo_datos[5])
-            sql="UPDATE empleado SET nombre=?,apellido=?,direccion=?,edad=?,cargo=?,salario=? WHERE id=?"
-            cursor.execute(sql,nuevos_Datos)
-            print("Se ha modificado el empleado")
+        #Agregamos el campo y el valor a modificar en el usuario con el id elegido
+        sql="UPDATE empleado SET "+clave+" = ? WHERE id= "+str(doc)#pasamos el ID a string para que no de error
+        cursor.execute(sql, (valor,))#Añade el valor a la consulta
+        print("Se ha modificado el empleado")
     
     def eliminar(conn,nombre):
         cursor=conn.cursor()
